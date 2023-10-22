@@ -7,55 +7,106 @@ import (
 	"github.com/google/uuid"
 )
 
+//	type Position struct {
+//		file rune // Columns
+//		rank int  // Rows
+//	}
 type Piece struct {
 	pieceId   uuid.UUID
 	playerId  int
 	pieceType PieceType
 	file      rune // Columns
 	rank      int  // Rows
-	prevLoc   string
-	isDead    bool
+	// position  Position
+	prevLoc string
+	isDead  bool
 }
 
 func newPiece(id int, pieceType PieceType, newFile rune, newRank int) *Piece {
 	p := Piece{pieceId: uuid.New(), playerId: id, pieceType: pieceType, file: newFile, rank: newRank, prevLoc: "", isDead: false}
 	return &p
 }
-func (p Piece) GetCurrentLocation() (file rune, rank int) {
-	return p.file, p.rank
+func (p Piece) GetCurrentLocation() string {
+	return fmt.Sprintf("%c", p.file) + strconv.Itoa(p.rank)
 }
 func (p Piece) printPiece() {
 	fmt.Printf("PieceID:%s, PlayerID: %d, Type: %s, Current Location:%c, %d \n", p.pieceId, p.playerId, p.pieceType, p.file, p.rank)
 }
-func (p Piece) printAvailableLocation() {
-	// TODO In the future.
+
+func getKingAvailableLocation(board map[string]Piece, file rune, rank int) []string {
+	var availLoc []string
+
+	newFile := file + 1
+	newRank := rank
+
+	// How to get the value for the
+	if newFile <= 'h' && newFile > 'a' && newRank <= 8 && newRank > 0 {
+		availLoc = append(availLoc, fmt.Sprintf("%c", newFile)+strconv.Itoa(newRank))
+	}
+	newFile = file - 1
+	if newFile <= 'h' && newFile > 'a' && newRank <= 8 && newRank > 0 {
+		availLoc = append(availLoc, fmt.Sprintf("%c", newFile)+strconv.Itoa(newRank))
+	}
+	newFile = file
+	newRank = rank + 1
+	if newFile <= 'h' && newFile > 'a' && newRank <= 8 && newRank > 0 {
+		availLoc = append(availLoc, fmt.Sprintf("%c", newFile)+strconv.Itoa(newRank))
+	}
+	newFile = file
+	newRank = rank - 1
+	if newFile <= 'h' && newFile > 'a' && newRank <= 8 && newRank > 0 {
+		availLoc = append(availLoc, fmt.Sprintf("%c", newFile)+strconv.Itoa(newRank))
+	}
+	newFile = file + 1
+	newRank = rank + 1
+	if newFile <= 'h' && newFile > 'a' && newRank <= 8 && newRank > 0 {
+		availLoc = append(availLoc, fmt.Sprintf("%c", newFile)+strconv.Itoa(newRank))
+	}
+	newFile = file + 1
+	newRank = rank - 1
+	if newFile <= 'h' && newFile > 'a' && newRank <= 8 && newRank > 0 {
+		availLoc = append(availLoc, fmt.Sprintf("%c", newFile)+strconv.Itoa(newRank))
+	}
+	newFile = file - 1
+	newRank = rank + 1
+	if newFile <= 'h' && newFile > 'a' && newRank <= 8 && newRank > 0 {
+		availLoc = append(availLoc, fmt.Sprintf("%c", newFile)+strconv.Itoa(newRank))
+	}
+	newFile = file - 1
+	newRank = rank - 1
+	if newFile <= 'h' && newFile > 'a' && newRank <= 8 && newRank > 0 {
+		availLoc = append(availLoc, fmt.Sprintf("%c", newFile)+strconv.Itoa(newRank))
+	}
+	return availLoc
 }
 
-// TODO : Get Available location based on the current loc.
-func (p Piece) getAvailableLocation() []string {
+func getQueenAvailableLocation(file rune, rank int) []string {
+	var availLoc []string
+	return availLoc
+}
+func getKnightAvailableLocation(file rune, rank int) []string {
+	var availLoc []string
+	return availLoc
+}
+func getBishopAvailableLocation(file rune, rank int) []string {
+	var availLoc []string
+	return availLoc
+}
+
+func (p Piece) getAvailableLocation(board map[string]Piece) []string {
 	var availLoc []string
 	if p.pieceType == K {
-		// TODO Total 8 directions.
-		newFile := p.file + 1
-		newRank := p.rank
-		// TODO Validation
-		availLoc = append(availLoc, fmt.Sprintf("%c", newFile)+strconv.Itoa(newRank))
+		availLoc = getKingAvailableLocation(board, p.file, p.rank)
+	} else if p.pieceType == Q {
+		availLoc = getQueenAvailableLocation(p.file, p.rank)
+	} else if p.pieceType == N {
+		availLoc = getKnightAvailableLocation(p.file, p.rank)
+	} else if p.pieceType == B {
+		availLoc = getBishopAvailableLocation(p.file, p.rank)
+	} else {
 
-		newFile = p.file - 1
-		availLoc = append(availLoc, fmt.Sprintf("%c", newFile)+strconv.Itoa(newRank))
-
-		newFile = p.file
-		newRank = p.rank + 1
-		availLoc = append(availLoc, fmt.Sprintf("%c", newFile)+strconv.Itoa(newRank))
-
-		newFile = p.file
-		newRank = p.rank - 1
-		availLoc = append(availLoc, fmt.Sprintf("%c", newFile)+strconv.Itoa(newRank))
-
-		fmt.Println(availLoc)
 	}
-	// Need to return List?
-	return nil
+	return availLoc
 }
 func isAvailableMove(newFile rune, newRank int) bool {
 	return true

@@ -5,9 +5,8 @@ import (
 	"strconv"
 )
 
-func main() {
+func createBoard() map[string]Piece {
 
-	// basic board setup
 	myDict := make(map[string]Piece)
 	for i := 8; i >= 1; i-- {
 		for j := 'a'; j <= 'h'; j++ {
@@ -15,6 +14,13 @@ func main() {
 			myDict[temp] = Piece{}
 		}
 	}
+	return myDict
+}
+
+func main() {
+
+	// basic board setup
+	myDict := createBoard()
 
 	// Player setup
 	// manually setup the pieces location.
