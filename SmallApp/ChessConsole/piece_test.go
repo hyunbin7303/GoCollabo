@@ -36,6 +36,18 @@ func TestGetAvailableLocationForKing_EdgeCase(t *testing.T) {
 }
 
 func TestGetAvailableLocationForKing_ExistingPieceAroundMainPiece(t *testing.T) {
+	myDict := createBoard()
+	piece := newPiece(1, K, 'e', 4)
+	piece2 := newPiece(1, Q, 'f', 4)
+	myDict[piece.GetCurrentLocation()] = *piece
+	myDict[piece2.GetCurrentLocation()] = *piece2
 
-	// Currently Not implemented yet.
+	result := piece.getAvailableLocation(myDict)
+
+	count := len(result)
+	if count != 7 {
+		t.Errorf("Got %d.", count)
+		t.Error("Total available location is 7.")
+	}
+
 }
