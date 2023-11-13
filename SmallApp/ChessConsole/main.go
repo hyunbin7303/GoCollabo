@@ -24,31 +24,38 @@ func main() {
 
 	// Player setup
 	// manually setup the pieces location.
-	player1 := Player{playerId: 1, numOfTurn: 0}
-	player2 := Player{playerId: 2, numOfTurn: 0}
+	// player1, err := newPlayer(1)
+	// player2, err := newPlayer(2)
+	// fmt.Println(player1.pieces)
+	// fmt.Println(player2.pieces)
 
 	player1_k := newPiece(1, K, 'e', 8)
-	myDict["e8"] = *player1_k
-	// fmt.Println(myDict)
+	player1_q := newPiece(1, Q, 'd', 8)
+	player1_b := newPiece(1, B, 'c', 8)
+	player1_b2 := newPiece(1, B, 'f', 8)
+	myDict["d8"] = *player1_k
+	myDict["e8"] = *player1_q
+	myDict["c8"] = *player1_b
+	myDict["f8"] = *player1_b2
 
-	fmt.Println(player1)
-	fmt.Println(player2)
+	player2_k := newPiece(2, K, 'd', 1)
+	player2_q := newPiece(2, Q, 'e', 1)
+	myDict["d1"] = *player2_k
+	myDict["e1"] = *player2_q
 
 	fmt.Println("[Player1]Pick the piece")
 	var input string
-	_, err := fmt.Scan(&input)
-	if err != nil {
-		fmt.Println("Error:", err)
-		return
-	}
+	fmt.Scan(&input)
 	// Need to verify if Piece Exists in that tile.
 	fmt.Println("[Player1] You entered Piece location:", input)
 	piece, ok := myDict[input]
 	if ok {
 		piece.printPiece()
+		availableMap := piece.getAvailableLocation(myDict)
+		fmt.Println(availableMap)
 		if piece.playerId == 1 {
 			fmt.Println("Enter movement location: ")
-			_, err = fmt.Scan(&input)
+			_, err := fmt.Scan(&input)
 			if err != nil {
 				fmt.Println("Error:", err)
 				return
@@ -68,8 +75,15 @@ func main() {
 		fmt.Println("Please check the tile")
 	}
 
-	// TODO Set up the King's location
-
-	// Game Engine setup
-	// while loop for playing game until one user loses (checkmate or king died)
+	// fmt.Println("[Player2]Pick the piece")
+	// _, err = fmt.Scan(&input)
+	// if err != nil {
+	// 	fmt.Println("Error:", err)
+	// 	return
+	// }
+	// fmt.Println("[Player2] You entered Piece location:", input)
+	// piece, ok = myDict[input]
+	// if ok {
+	// 	piece.printPiece()
+	// }
 }

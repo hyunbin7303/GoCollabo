@@ -23,6 +23,9 @@ type Piece struct {
 }
 
 func newPiece(id int, pieceType PieceType, newFile rune, newRank int) *Piece {
+	if !(id == 1 || id == 2) {
+		panic("Player ID should be 1 or 2.")
+	}
 	p := Piece{pieceId: uuid.New(), playerId: id, pieceType: pieceType, file: newFile, rank: newRank, prevLoc: "", isDead: false}
 	return &p
 }
@@ -101,6 +104,7 @@ func getBishopAvailableLocation(file rune, rank int) []string {
 	return availLoc
 }
 
+// TODO
 func (p Piece) getAvailableLocation(board map[string]Piece) []string {
 	var availLoc []string
 	if p.pieceType == K {

@@ -1,8 +1,19 @@
 package main
 
 import (
+	"fmt"
 	"testing"
 )
+
+func TestPlayerIdIsNot1or2(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("Player ID should be 1 or 2.", r)
+		}
+	}()
+	newPiece(3, K, 'e', 4)
+
+}
 
 func TestGetAvailableLocationForKing(t *testing.T) {
 	myDict := createBoard()
