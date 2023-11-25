@@ -11,7 +11,7 @@ func createBoard() map[string]Piece {
 	for i := 8; i >= 1; i-- {
 		for j := 'a'; j <= 'h'; j++ {
 			temp := fmt.Sprintf("%c", j) + strconv.Itoa(i)
-			myDict[temp] = Piece{}
+			myDict[temp] = Piece{isDead: true}
 		}
 	}
 	return myDict
@@ -33,25 +33,25 @@ func main() {
 	player1_q := newPiece(1, Q, 'd', 8)
 	player1_b := newPiece(1, B, 'c', 8)
 	player1_b2 := newPiece(1, B, 'f', 8)
-	myDict["d8"] = *player1_k
-	myDict["e8"] = *player1_q
+	myDict["d8"] = *player1_q
+	myDict["e8"] = *player1_k
 	myDict["c8"] = *player1_b
 	myDict["f8"] = *player1_b2
 
 	player2_k := newPiece(2, K, 'd', 1)
 	player2_q := newPiece(2, Q, 'e', 1)
-	myDict["d1"] = *player2_k
-	myDict["e1"] = *player2_q
+	myDict["d1"] = *player2_q
+	myDict["e1"] = *player2_k
 
 	fmt.Println("[Player1]Pick the piece")
 	var input string
 	fmt.Scan(&input)
-	// Need to verify if Piece Exists in that tile.
 	fmt.Println("[Player1] You entered Piece location:", input)
 	piece, ok := myDict[input]
 	if ok {
 		piece.printPiece()
 		availableMap := piece.getAvailableLocation(myDict)
+		fmt.Println("Get Available Location:")
 		fmt.Println(availableMap)
 		if piece.playerId == 1 {
 			fmt.Println("Enter movement location: ")

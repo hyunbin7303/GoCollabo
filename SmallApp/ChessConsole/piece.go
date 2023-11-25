@@ -36,14 +36,24 @@ func (p Piece) printPiece() {
 	fmt.Printf("PieceID:%s, PlayerID: %d, Type: %s, Current Location:%c, %d \n", p.pieceId, p.playerId, p.pieceType, p.file, p.rank)
 }
 
-func isValidLoc(board map[string]Piece, playerId int, newFile rune, newRank int) bool {
-	if newFile <= 'h' && newFile > 'a' && newRank <= 8 && newRank > 0 {
+//	func isValidLoc(board map[string]Piece, playerId int, newFile rune, newRank int) bool {
+//		if newFile <= 'h' && newFile >= 'a' && newRank <= 8 && newRank > 0 {
+//			checkLoc := fmt.Sprintf("%c", newFile) + strconv.Itoa(newRank)
+//			if board[checkLoc].playerId != playerId {
+//				return true
+//			}
+//		}
+//		return false
+//	}
+func isValidLoc(board map[string]Piece, playerId int, newFile rune, newRank int) (bool, Piece) {
+	if newFile <= 'h' && newFile >= 'a' && newRank <= 8 && newRank > 0 {
 		checkLoc := fmt.Sprintf("%c", newFile) + strconv.Itoa(newRank)
-		if board[checkLoc].playerId != playerId {
-			return true
+		piece := board[checkLoc]
+		if piece.playerId != playerId {
+			return true, piece
 		}
 	}
-	return false
+	return false, Piece{isDead: true}
 }
 
 func (p *Piece) getKingAvailableLocation(board map[string]Piece) []string {
@@ -51,48 +61,197 @@ func (p *Piece) getKingAvailableLocation(board map[string]Piece) []string {
 
 	newFile := p.file + 1
 	newRank := p.rank
-	if isValidLoc(board, p.playerId, newFile, newRank) {
+	isValidLocResult, checkPiece := isValidLoc(board, p.playerId, newFile, newRank)
+	if isValidLocResult && checkPiece.playerId != p.playerId {
 		availLoc = append(availLoc, fmt.Sprintf("%c", newFile)+strconv.Itoa(newRank))
 	}
+
 	newFile = p.file - 1
-	if isValidLoc(board, p.playerId, newFile, newRank) {
+	isValidLocResult, checkPiece = isValidLoc(board, p.playerId, newFile, newRank)
+	if isValidLocResult && checkPiece.playerId != p.playerId {
 		availLoc = append(availLoc, fmt.Sprintf("%c", newFile)+strconv.Itoa(newRank))
 	}
+
 	newFile = p.file
 	newRank = p.rank + 1
-	if isValidLoc(board, p.playerId, newFile, newRank) {
+	isValidLocResult, checkPiece = isValidLoc(board, p.playerId, newFile, newRank)
+	if isValidLocResult && checkPiece.playerId != p.playerId {
 		availLoc = append(availLoc, fmt.Sprintf("%c", newFile)+strconv.Itoa(newRank))
 	}
+
 	newFile = p.file
 	newRank = p.rank - 1
-	if isValidLoc(board, p.playerId, newFile, newRank) {
+	isValidLocResult, checkPiece = isValidLoc(board, p.playerId, newFile, newRank)
+	if isValidLocResult && checkPiece.playerId != p.playerId {
 		availLoc = append(availLoc, fmt.Sprintf("%c", newFile)+strconv.Itoa(newRank))
 	}
+
 	newFile = p.file + 1
 	newRank = p.rank + 1
-	if isValidLoc(board, p.playerId, newFile, newRank) {
+	isValidLocResult, checkPiece = isValidLoc(board, p.playerId, newFile, newRank)
+	if isValidLocResult && checkPiece.playerId != p.playerId {
 		availLoc = append(availLoc, fmt.Sprintf("%c", newFile)+strconv.Itoa(newRank))
 	}
+
 	newFile = p.file + 1
 	newRank = p.rank - 1
-	if isValidLoc(board, p.playerId, newFile, newRank) {
+	isValidLocResult, checkPiece = isValidLoc(board, p.playerId, newFile, newRank)
+	if isValidLocResult && checkPiece.playerId != p.playerId {
 		availLoc = append(availLoc, fmt.Sprintf("%c", newFile)+strconv.Itoa(newRank))
 	}
+
 	newFile = p.file - 1
 	newRank = p.rank + 1
-	if isValidLoc(board, p.playerId, newFile, newRank) {
+	isValidLocResult, checkPiece = isValidLoc(board, p.playerId, newFile, newRank)
+	if isValidLocResult && checkPiece.playerId != p.playerId {
 		availLoc = append(availLoc, fmt.Sprintf("%c", newFile)+strconv.Itoa(newRank))
 	}
+
 	newFile = p.file - 1
 	newRank = p.rank - 1
-	if isValidLoc(board, p.playerId, newFile, newRank) {
+	isValidLocResult, checkPiece = isValidLoc(board, p.playerId, newFile, newRank)
+	if isValidLocResult && checkPiece.playerId != p.playerId {
 		availLoc = append(availLoc, fmt.Sprintf("%c", newFile)+strconv.Itoa(newRank))
 	}
 	return availLoc
 }
 
+func updateAvailableLoc() {
+
+}
+
 func (p *Piece) getQueenAvailableLocation(board map[string]Piece) []string {
 	var availLoc []string
+	newFile := p.file
+	newRank := p.rank
+	// Moving to right direction
+	for true {
+		newFile += 1
+		isValidLocResult, checkPiece := isValidLoc(board, p.playerId, newFile, newRank)
+		if isValidLocResult {
+			availLoc = append(availLoc, fmt.Sprintf("%c", newFile)+strconv.Itoa(newRank))
+			if !checkPiece.isDead && checkPiece.playerId != p.playerId {
+				break
+			}
+			continue
+		}
+		break
+	}
+
+	// Moving to left direction
+	newFile = p.file
+	for true {
+		newFile -= 1
+		isValidLocResult, checkPiece := isValidLoc(board, p.playerId, newFile, newRank)
+		if isValidLocResult {
+			availLoc = append(availLoc, fmt.Sprintf("%c", newFile)+strconv.Itoa(newRank))
+			if !checkPiece.isDead && checkPiece.playerId != p.playerId {
+				break
+			}
+			continue
+		}
+		break
+	}
+	// moving to below direction
+	newFile = p.file
+	newRank = p.rank
+	for true {
+		newRank -= 1
+		isValidLocResult, checkPiece := isValidLoc(board, p.playerId, newFile, newRank)
+		if isValidLocResult {
+			availLoc = append(availLoc, fmt.Sprintf("%c", newFile)+strconv.Itoa(newRank))
+			if !checkPiece.isDead && checkPiece.playerId != p.playerId {
+				break
+			}
+			continue
+		}
+		break
+	}
+
+	// Moving to upper direction
+	newFile = p.file
+	newRank = p.rank
+	for true {
+		newRank += 1
+		isValidLocResult, checkPiece := isValidLoc(board, p.playerId, newFile, newRank)
+		if isValidLocResult {
+			availLoc = append(availLoc, fmt.Sprintf("%c", newFile)+strconv.Itoa(newRank))
+			if !checkPiece.isDead && checkPiece.playerId != p.playerId {
+				break
+			}
+			continue
+		}
+		break
+	}
+
+	// Moving to upper right direction
+	newFile = p.file
+	newRank = p.rank
+	for true {
+		newRank += 1
+		newFile += 1
+		isValidLocResult, checkPiece := isValidLoc(board, p.playerId, newFile, newRank)
+		if isValidLocResult {
+			availLoc = append(availLoc, fmt.Sprintf("%c", newFile)+strconv.Itoa(newRank))
+			if !checkPiece.isDead && checkPiece.playerId != p.playerId {
+				break
+			}
+			continue
+		}
+		break
+	}
+
+	// Moving to upper left direction
+	newFile = p.file
+	newRank = p.rank
+	for true {
+		newRank += 1
+		newFile -= 1
+		isValidLocResult, checkPiece := isValidLoc(board, p.playerId, newFile, newRank)
+		if isValidLocResult {
+			availLoc = append(availLoc, fmt.Sprintf("%c", newFile)+strconv.Itoa(newRank))
+			if !checkPiece.isDead && checkPiece.playerId != p.playerId {
+				break
+			}
+			continue
+		}
+		break
+	}
+
+	// Moving to below left direction
+	newFile = p.file
+	newRank = p.rank
+	for true {
+		newRank -= 1
+		newFile -= 1
+		isValidLocResult, checkPiece := isValidLoc(board, p.playerId, newFile, newRank)
+		if isValidLocResult {
+			availLoc = append(availLoc, fmt.Sprintf("%c", newFile)+strconv.Itoa(newRank))
+			if !checkPiece.isDead && checkPiece.playerId != p.playerId {
+				break
+			}
+			continue
+		}
+		break
+	}
+
+	// Moving to below right direction
+	newFile = p.file
+	newRank = p.rank
+	for true {
+		newRank -= 1
+		newFile += 1
+		isValidLocResult, checkPiece := isValidLoc(board, p.playerId, newFile, newRank)
+		if isValidLocResult {
+			availLoc = append(availLoc, fmt.Sprintf("%c", newFile)+strconv.Itoa(newRank))
+			if !checkPiece.isDead && checkPiece.playerId != p.playerId {
+				break
+			}
+			continue
+		}
+		break
+	}
+
 	return availLoc
 }
 func getKnightAvailableLocation(file rune, rank int) []string {
