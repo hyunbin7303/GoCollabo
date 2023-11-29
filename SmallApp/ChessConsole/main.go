@@ -19,7 +19,6 @@ func createBoard() map[string]Piece {
 
 func main() {
 
-	// basic board setup
 	myDict := createBoard()
 
 	// Player setup

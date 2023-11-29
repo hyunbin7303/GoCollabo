@@ -7,6 +7,10 @@ import "fmt"
 type SpecialPosition struct {
 	Position
 }
+type Attack struct {
+	damage int
+	name   string
+}
 
 func (sp *SpecialPosition) MoveSpecial(x, y float64) {
 	sp.x += x * x
@@ -39,6 +43,7 @@ func NewPlayer() *Player {
 
 type Enemy struct {
 	*SpecialPosition
+	*Attack
 }
 
 func NewEnemy() *Enemy {
@@ -51,6 +56,7 @@ func (e *Enemy) Move(x, y float64) {
 	e.x += x
 	e.y += y
 }
+
 func main() {
 	fmt.Println("Test")
 
@@ -60,6 +66,8 @@ func main() {
 
 	bossMonster.MoveSpecial(1.1, 10.4)
 	fmt.Println("Move Special : ", bossMonster.Position)
+
+	// bossMonster.Attack(30)
 
 	player := NewPlayer()
 	player.Move(1.1, 10.4)
