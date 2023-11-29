@@ -3,6 +3,9 @@ package main
 import (
 	helloworldfurther "HelloWorld/HelloWorld/HelloWorldFurther"
 	"fmt"
+
+	"github.com/GoesToEleven/dog"
+	"github.com/GoesToEleven/puppy"
 )
 
 // file block scope
@@ -20,6 +23,12 @@ func main() {
 	// helloworldfurther.Checking()
 	// helloworldfurther.testing()
 
+	s1 := puppy.Bark()
+	fmt.Println(s1)
+
+	s2 := dog.WhenGrownUp("Test")
+
+	fmt.Println(s2)
 }
 
 func PrintMe() {
