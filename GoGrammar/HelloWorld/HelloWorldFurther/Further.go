@@ -4,43 +4,65 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
-	"time"
 )
 
 // In golang, it uses the world Exported and unexported rather than public or private.
-// Exported function since the first character is capitalized.
-// Exported and unexported items.
+// Exported function since the first character is capitalized.Exported and unexported items.
 // using upper case of the first character - public, visible ooutside of package
 // using lower case of the first character - private,not visible outside of package
-
-func Testing() {
-	fmt.Print("Testing")
-	testing()
+func PrintOutFoo(num int) int {
+	fmt.Printf("Printing out number:%d. ", num)
+	return num
 }
-func testing() {
+func checking() { // This cannot be used in hello.go or other go files.
 	fmt.Print("testing")
 }
 
-func SwitchStatement() {
-	x := 30
+func SwitchStatementMultiValues(char rune) bool {
+	switch char {
+	case ' ', '\t', '\n', '\f', '\r':
+		return true
+	}
+	return false
+}
+
+// Fallthrough - transfers control to the next case.
+func SwitchStatement(num int) {
+	x := num
 	switch {
-	case x < 42:
-		fmt.Println("x is less than 42")
+	case x < 20:
+		fmt.Println("x is less than 20")
+		fallthrough
+
+	case x >= 20 && x < 60:
+		fmt.Println("x is bigger than or equal to 20, and less than 60.")
 		fallthrough
 	default:
-
+		fmt.Println("Not in the criteria")
 	}
 }
 
-func IfStatement() {
-	fmt.Println("If statement testing-----")
-	x := 40
+func ValidateEvenNum() {
+	fmt.Println("Type number:")
+	var num int
+	fmt.Scanln(&num)
+	if ok, err := isEvenNumber(num); ok {
+		fmt.Printf("Given number %d is divisible. %v \n", num, ok)
+	} else {
+		fmt.Println(err)
+	}
+}
+
+func IfStatement(num int) {
+	x := num
 	if z := 2 * rand.Intn(x); z >= x {
 		fmt.Printf("Z value checking %v\n", z)
 	} else {
 		fmt.Printf("Z value and x value : %v %v \n", z, x)
 	}
 
+}
+func GetScoreOfUserFromMap(user string) (int, error) {
 	mapping := map[string]int{
 		"kevin": 80,
 		"macy":  54,
@@ -49,55 +71,21 @@ func IfStatement() {
 	}
 	if v, exists := mapping["kevin"]; exists {
 		fmt.Printf("Kevin's score: %d \n", v)
+		return v, nil
 	}
-
-	// Using Ok Idiom
-	var str interface{} = "testing sentence"
-	s, ok := str.(string)
-	fmt.Println(s, ok)
-
-	fmt.Println("Testing number")
-	num := 11
-	if ok, err := isEvenNumber(num); ok {
-		fmt.Printf("Given number %d is divisible. %v \n", num, ok)
-	} else {
-		fmt.Println(err)
-	}
+	return 0, errors.New("User does not exist in the system")
 }
 
-func GoSelectStatement() {
-	ch1 := make(chan int)
-	ch2 := make(chan int)
-
-	d1 := time.Duration(rand.Int63n(250))
-	d2 := time.Duration(rand.Int63n(250))
-	go func() {
-		time.Sleep(d1 * time.Millisecond)
-		ch1 <- 41
-	}()
-
-	go func() {
-		time.Sleep(d2 * time.Millisecond)
-		ch2 <- 42
-	}()
-
-	// Select is for when we're writing concurrent code and dealing with channels.
-	select {
-	case v1 := <-ch1:
-		fmt.Println("value from channel 1", v1)
-	case v2 := <-ch2:
-		fmt.Println("value from channel 2", v2)
-	}
-}
-
-func ForRangeLoopStatement() {
-	arr := []int{10, 20, 30, 40, 50}
-	for i, v := range arr {
+func ForRangeGetSum(givenFiveNums [5]int) int {
+	for i, v := range givenFiveNums {
 		fmt.Println("Ranging testing", i, v)
 	}
+	var total = 0
+	for _, price := range givenFiveNums {
+		total += price
+	}
+	return total
 }
-
-// If statement with interface variable.
 
 func isEvenNumber(num int) (bool, error) {
 	if num%2 != 0 {

@@ -18,18 +18,25 @@ func main() {
 	fmt.Println(x)
 	PrintMe()
 
-	helloworldfurther.Testing()
-	// helloworldfurther.Checking()
+	switch helloworldfurther.PrintOutFoo(20) {
+	case helloworldfurther.PrintOutFoo(10), helloworldfurther.PrintOutFoo(20), helloworldfurther.PrintOutFoo(30):
+		fmt.Println("First number say it.")
+		fallthrough
+
+	case helloworldfurther.PrintOutFoo(40):
+		fmt.Println("Print out the second number.")
+	}
+
 	fmt.Println(puppy.Bark())
 	fmt.Println(dog.WhenGrownUp("Test"))
 
-	helloworldfurther.IfStatement()
+	helloworldfurther.IfStatement(40)
+	helloworldfurther.SwitchStatement(30)
+	helloworldfurther.GoRoutineUsage()
+	// helloworldfurther.ForRangeLoopStatement()
 
-	helloworldfurther.SwitchStatement()
+	helloworldfurther.UsingOkIdiomWithInterface()
 
-	helloworldfurther.GoSelectStatement()
-
-	helloworldfurther.ForRangeLoopStatement()
 }
 
 func PrintMe() {
